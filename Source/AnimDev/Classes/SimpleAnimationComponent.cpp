@@ -1,6 +1,8 @@
 #include "SimpleAnimationComponent.h"
 #include <Animation/AnimCompressionTypes.h>
 #include <AnimationUtils.h>
+#include <Engine/ScopedMovementUpdate.h>
+
 DECLARE_CYCLE_STAT(TEXT("SimpleAnimationComponent::Tick"), STAT_SimpleAnimTick, STATGROUP_Anim);
 
 USimpleAnimationComponent::USimpleAnimationComponent(const FObjectInitializer& ObjectInitializer)
@@ -57,6 +59,7 @@ void USimpleAnimationComponent::TickComponent(float DeltaTime, enum ELevelTick T
 
 void USimpleAnimationComponent::SetTransform(const FTransform& InTransform)
 {
+    FScopedMovementUpdate ScopedMovementUpdate(Target, EScopedUpdate::DeferredUpdates);
     FVector Translation = BaseTransform.GetTranslation() + InTransform.GetTranslation();
     FQuat Rotation = BaseTransform.GetRotation() * InTransform.GetRotation();
     FVector Scale = BaseTransform.GetScale3D() * InTransform.GetScale3D();
