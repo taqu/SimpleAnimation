@@ -1,6 +1,7 @@
 #include "SimpleAnimationComponent.h"
 #include <Animation/AnimCompressionTypes.h>
 #include <AnimationUtils.h>
+DECLARE_CYCLE_STAT(TEXT("SimpleAnimationComponent::Tick"), STAT_SimpleAnimTick, STATGROUP_Anim);
 
 USimpleAnimationComponent::USimpleAnimationComponent(const FObjectInitializer& ObjectInitializer)
     : Super(ObjectInitializer)
@@ -37,6 +38,7 @@ void USimpleAnimationComponent::BeginPlay()
 
 void USimpleAnimationComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
+    SCOPE_CYCLE_COUNTER(STAT_SimpleAnimTick);
     Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
     CurrentTime += DeltaTime * PlayRate;
     while(Animation->GetPlayLength() < CurrentTime) {
